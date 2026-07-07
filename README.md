@@ -30,6 +30,154 @@ source .venv/bin/activate  # Windows: .venv\Scripts\activate
 uv pip install -e ".[dev]"
 ```
 
+
+`".[dev]"` は、**「今いるディレクトリのプロジェクトを、開発用オプション付きでインストールする」**という意味です。
+
+例えば、リポジトリに以下のような `pyproject.toml` があるとします。
+
+```toml
+[project]
+name = "or-tools-experience-minimal"
+dependencies = [
+    "ortools",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "ruff",
+]
+```
+
+このとき、
+
+```bash
+pip install .
+```
+
+を実行すると、
+
+* ortools
+
+だけがインストールされます。
+
+一方、
+
+```bash
+pip install ".[dev]"
+```
+
+を実行すると、
+
+* ortools
+* pytest
+* ruff
+
+までまとめてインストールされます。
+
+---
+
+## `.` の意味
+
+`.` は
+
+> **現在のディレクトリのPythonプロジェクト**
+
+という意味です。
+
+例えば
+
+```bash
+cd or-tools-experience-minimal
+```
+
+の中で
+
+```bash
+pip install .
+```
+
+を実行すると、
+
+そのフォルダにある `pyproject.toml` を読んでインストールします。
+
+---
+
+## `[dev]` の意味
+
+`[dev]` は
+
+> **optional-dependencies の "dev" グループ**
+
+を指定しています。
+
+例えば
+
+```toml
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "ruff",
+]
+
+docs = [
+    "mkdocs",
+]
+
+gpu = [
+    "cupy",
+]
+```
+
+なら
+
+```bash
+pip install ".[dev]"
+```
+
+開発用ツールを入れる。
+
+```bash
+pip install ".[docs]"
+```
+
+ドキュメント生成用だけ入れる。
+
+```bash
+pip install ".[gpu]"
+```
+
+GPU用ライブラリを追加する。
+
+という使い分けができます。
+
+
+##  `uv` を使う場合
+
+
+```bash
+uv sync
+```
+
+とするだけで、`pyproject.toml` に書かれた依存関係がまとめてインストールされます。
+
+開発用も含めるなら
+
+```bash
+uv sync --extra dev
+```
+
+となります。
+
+全体として、下記のように操作することができます。
+
+```bash
+uv sync
+uv run python scripts/01_hello.py
+uv run pytest
+```
+
+
 ## 実行順序
 
 ```bash
