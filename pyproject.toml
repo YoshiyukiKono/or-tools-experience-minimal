@@ -1,0 +1,22 @@
+[project]
+name = "or-tools-experience-minimal"
+version = "0.1.0"
+description = "Minimal hands-on repository to move from zero OR-Tools experience to explainable modeling experience."
+requires-python = ">=3.11"
+dependencies = [
+  "ortools>=9.15",
+  "pandas>=2.2",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.0",
+  "ruff>=0.6",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 100
